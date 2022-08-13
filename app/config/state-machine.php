@@ -64,9 +64,21 @@ return array(
 
         'states' => [
             [
+                'name' => 'new',
+                'metadata' => ['title' => 'New Article'],
+            ],
+            [
                 'name' => 'pending_review',
                 'metadata' => ['title' => 'Pending Review'],
             ],
+            [
+                'name' => 'published',
+                'metadata' => ['title' => 'Published'],
+            ],
+            [
+                'name' => 'accepted',
+                'metadata' => ['title' => 'Ask for changes'],
+            ]
         ],
 
         'transitions' => [
@@ -75,6 +87,8 @@ return array(
                 'to' => 'accepted',
                 'metadata' => ['title' => 'Ask for changes'],
             ],
+            'create' => ['from' => ['new'], 'to' => 'pending_review'],
+            'publish' => ['from' => ['pending_review'], 'to' => 'published'],
         ],
     ]
 );
