@@ -90,5 +90,79 @@ return array(
             'create' => ['from' => ['new'], 'to' => 'pending_review'],
             'publish' => ['from' => ['pending_review'], 'to' => 'published'],
         ],
+    ],
+    'document' => [
+        'class' => StateMachine\Examples\Document::class,
+        'graph'         => 'document', // Name of the current graph - there can be many of them attached to the same object
+        'property_path' => 'documentState',  // Property path of the object actually holding the state
+        'metadata' => [
+            'title' => 'Document State Machine',
+        ],
+
+        'states' => [
+            [
+                'name' => 'draft',
+                'metadata' => [
+                    'title' => 'Draft'
+                ],
+            ],
+            [
+                'name' => 'moderation',
+                'metadata' => [
+                    'title' => 'Moderation',
+                    'description' => 'published_by_user'
+                ],
+            ],
+            [
+                'name' => 'published',
+                'metadata' => [
+                    'title' => 'Published',
+                    'description' => 'published_by_admin'
+                ],
+            ]
+        ],
+        'transitions' => [
+            'published_by_admin' => ['from' => ['draft'], 'to' => 'published'],
+            'published_by_user' => ['from' => ['draft'], 'to' => 'moderation'],
+            'review_failed' => ['from' => ['moderation'], 'to' => 'draft'],
+            'approved_by_admin' => ['from' => ['moderation'], 'to' => 'published'],
+            'publication_expired' => ['from' => ['published'], 'to' => 'draft'],
+        ],
+    ],
+    'audio_player' => [
+        'class' => StateMachine\Examples\AudioPlayer::class,
+        'graph'         => 'audio_player', // Name of the current graph - there can be many of them attached to the same object
+        'property_path' => 'AudioPlayerState',  // Property path of the object actually holding the state
+        'metadata' => [
+            'title' => 'AudioPlayer State Machine',
+        ],
+
+        'states' => [
+            [
+                'name' => 'locked',
+                'metadata' => [
+                    'title' => 'Locked'
+                ],
+            ],
+            [
+                'name' => 'ready',
+                'metadata' => [
+                    'title' => 'Ready'
+                ],
+            ],
+            [
+                'name' => 'playing',
+                'metadata' => [
+                    'title' => 'Playing'
+                ],
+            ],
+        ],
+        'transitions' => [
+            'click_lock_when_playing' => ['from' => ['playing'], 'to' => 'locked'],
+            'click_lock_when_locked' => ['from' => ['locked'], 'to' => 'ready'],
+            'click_play_when_playing' => ['from' => ['playing'], 'to' => 'ready'],
+            'click_play_when_ready' => ['from' => ['ready'], 'to' => 'playing'],
+            'click_lock_when_ready' => ['from' => ['ready'], 'to' => 'locked'],
+        ],
     ]
 );
